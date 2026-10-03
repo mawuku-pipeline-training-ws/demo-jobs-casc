@@ -43,9 +43,9 @@ globalCloudBeesPipelineTemplateCatalog:
         configuredByUrl: true
         credentialsId: "gh-app"
         id: "6ea3b918-aba9-4ee7-9ac3-d23466b9942c"
-        repoOwner: "pipeline-training-ws"
+        repoOwner: "mawuku-pipeline-training-ws"
         repository: "template-catalog"
-        repositoryUrl: "https://github.com/pipeline-training-ws/template-catalog.git"
+        repositoryUrl: "https://github.com/mawuku-pipeline-training-ws/template-catalog.git"
         traits:
         - gitHubBranchDiscovery:
             strategyId: 1

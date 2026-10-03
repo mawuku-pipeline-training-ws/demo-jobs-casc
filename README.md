@@ -8,14 +8,14 @@ labs. It is derived directly from:
   an already-working controller ([`bundle.yaml`](bundle.yaml), [`jenkins.yaml`](jenkins.yaml), [`plugins.yaml`](plugins.yaml), [`rbac.yaml`](rbac.yaml),
   [`items.yaml`](items.yaml)).
 - **`samples/`** — the four GitHub repositories the jobs actually build against
-  ([`sample-app-helloWorld`](https://github.com/pipeline-training-ws/sample-app-helloWorld), [`template-catalog`](https://github.com/pipeline-training-ws/template-catalog), [`shared-library`](https://github.com/pipeline-training-ws/shared-library), [`pipeline-samples`](https://github.com/pipeline-training-ws/pipeline-samples)).
+  ([`sample-app-helloWorld`](https://github.com/mawuku-pipeline-training-ws/sample-app-helloWorld), [`template-catalog`](https://github.com/mawuku-pipeline-training-ws/template-catalog), [`shared-library`](https://github.com/mawuku-pipeline-training-ws/shared-library), [`pipeline-samples`](https://github.com/mawuku-pipeline-training-ws/pipeline-samples)).
 
 ---
 
 ## 1. Architecture Overview
 
 ```
-GitHub org: pipeline-training-ws
+GitHub org: mawuku-pipeline-training-ws
 ├── sample-app-helloWorld   (app repo, ci-config.yaml + Jenkinsfile)
 ├── template-catalog        (Pipeline Template Catalog: 0-helloWorld, 1-helloWorld-MB)
 ├── shared-library           (Jenkins Shared Library: pipelineTemplateHelloWorld, etc.)
@@ -43,7 +43,7 @@ Gather/confirm these before touching the controller:
 | # | Requirement | Why it's needed | Source |
 | --- | --- | --- | --- |
 | 1 | A CloudBees CI Operations Center with a managed controller provisioned | `securityRealm: operationsCenter` requires a parent OC | [demo-jobs-casc/jenkins.yaml:27](jenkins.yaml#L27) |
-| 2 | A GitHub App installed on the `pipeline-training-ws` org with access to `sample-app-helloWorld`, `template-catalog`, and `shared-library` | Backs the `gh-app` credential used by Multibranch/Org Folder/Template Catalog jobs | [demo-jobs-casc/jenkins.yaml:6-12](jenkins.yaml#L6-L12), [items.yaml](items.yaml) |
+| 2 | A GitHub App installed on the `mawuku-pipeline-training-ws` org with access to `sample-app-helloWorld`, `template-catalog`, and `shared-library` | Backs the `gh-app` credential used by Multibranch/Org Folder/Template Catalog jobs | [demo-jobs-casc/jenkins.yaml:6-12](jenkins.yaml#L6-L12), [items.yaml](items.yaml) |
 | 3 | A GitHub Personal Access Token + username with read access to the same repos | Backs the `gh-pat` / `gh-pat-key` credentials used for plain checkout and the classic GitHub webhook plugin | [demo-jobs-casc/jenkins.yaml:13-23](jenkins.yaml#L13-L23) |
 | 4 | Values available for `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY`, `GITHUB_PAT`, `GITHUB_USERNAME`, `JENKINS_CONTROLLER_URL` | These are referenced as `${VAR}` placeholders throughout `jenkins.yaml`; CasC will fail to resolve credentials/URLs without them | [demo-jobs-casc/jenkins.yaml](jenkins.yaml) (multiple lines) |
 | 5 | A Kubernetes cloud already configured on the controller, with a node pool labeled/tolerated for `workload: agent` | 6 of the 9 jobs (`01-pipeline-simple` via the shared library, `06-parallel-samples/*`, `07-crossteam-collaboration-events/*`, `08-checkpoints`) run on `agent { kubernetes { ... } }` pods | see §5 |
@@ -52,7 +52,7 @@ Gather/confirm these before touching the controller:
 **Not required for the jobs currently in this bundle** (documented in `samples/` but not wired into
 any [`items.yaml`](items.yaml) job): `jfrog-user-token` and `jira-user-token` credentials, used only by the
 standalone `ci-jfrog-integration` / `ci-jira-integration` samples under
-[`pipeline-samples`](https://github.com/pipeline-training-ws/pipeline-samples). Skip these unless you plan to add those pipelines as jobs yourself.
+[`pipeline-samples`](https://github.com/mawuku-pipeline-training-ws/pipeline-samples). Skip these unless you plan to add those pipelines as jobs yourself.
 
 ---
 
@@ -167,11 +167,11 @@ healthy (**Manage Jenkins → Clouds**) before running any job beyond `00-HeloWo
 | `gh-pat` | Username/Password (scope GLOBAL) | `username: ${GITHUB_USERNAME}`, `password: ${GITHUB_PAT}` | `01-pipeline-simple` checkout, `template-catalog` checkout inside `02-MultiBranchJob-HelloWorld-customMarker` / `03-GitHub-Organisation`, and the shared-library dynamic `library()` step's default credential |
 | `gh-pat-key` | Secret text (scope GLOBAL) | `secret: ${GITHUB_PAT}` | Classic GitHub plugin config (`unclassified.gitHubPluginConfig`) — used only for webhook management, not checkout |
 
-> The shared library ([`shared-library`](https://github.com/pipeline-training-ws/shared-library)) is loaded **dynamically** via the `library()` step
+> The shared library ([`shared-library`](https://github.com/mawuku-pipeline-training-ws/shared-library)) is loaded **dynamically** via the `library()` step
 > with coordinates defaulted inline in each Jenkinsfile (`SHAREDLIB_GIT_*` env vars defaulting to
-> `pipeline-training-ws/shared-library@main` via credential `gh-pat`) — see
-> [`sample-app-helloWorld/Jenkinsfile`](https://github.com/pipeline-training-ws/sample-app-helloWorld/blob/main/Jenkinsfile) and
-> [`template-catalog/templates/1-helloWorld-MB/Jenkinsfile`](https://github.com/pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/Jenkinsfile). There is **no**
+> `mawuku-pipeline-training-ws/shared-library@main` via credential `gh-pat`) — see
+> [`sample-app-helloWorld/Jenkinsfile`](https://github.com/mawuku-pipeline-training-ws/sample-app-helloWorld/blob/main/Jenkinsfile) and
+> [`template-catalog/templates/1-helloWorld-MB/Jenkinsfile`](https://github.com/mawuku-pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/Jenkinsfile). There is **no**
 > `globalLibraries:` block in [`jenkins.yaml`](jenkins.yaml), so no separate "Global Pipeline Library"
 > registration step is needed for this workshop's jobs.
 
@@ -185,12 +185,12 @@ globalCloudBeesPipelineTemplateCatalog:
     scm:
       github:
         credentialsId: "gh-app"
-        repoOwner: "pipeline-training-ws"
+        repoOwner: "mawuku-pipeline-training-ws"
         repository: "template-catalog"
     updateInterval: "1d"
 ```
 
-This registers [`template-catalog`](https://github.com/pipeline-training-ws/template-catalog) (its `catalog.yaml` names it **"Pipeline Template
+This registers [`template-catalog`](https://github.com/mawuku-pipeline-training-ws/template-catalog) (its `catalog.yaml` names it **"Pipeline Template
 Catalog Examples"**) globally, at the root (`parentName: "/"`), refreshed daily. Confirm it has
 synced (**Manage Jenkins → Pipeline Template Catalogs**) before creating `05-PTC-job-MB` — that
 job's `model:` field references an internally generated template ID that only resolves once the
@@ -265,14 +265,14 @@ earlier, and the grouping below mirrors the workshop's four topic segments.
 **2. `06-parallel-samples` folder → `agent-global`** *(pipeline, inline script)*
 
 - Single Kubernetes pod (`maven` + `node` containers) shared by both parallel branches — the
-  "monolith" pattern from [`pipeline-samples/parallel/Jenkinsfile-global-agent`](https://github.com/pipeline-training-ws/pipeline-samples/blob/main/parallel/Jenkinsfile-global-agent).
+  "monolith" pattern from [`pipeline-samples/parallel/Jenkinsfile-global-agent`](https://github.com/mawuku-pipeline-training-ws/pipeline-samples/blob/main/parallel/Jenkinsfile-global-agent).
 - Requires the Kubernetes cloud from §5.2.
 - Run and inspect the Kubernetes tab: one pod, two sibling containers.
 
 **3. `06-parallel-samples` folder → `agent-per-stage`** *(pipeline, inline script)*
 
 - `agent none` at top level; each parallel branch requests its own pod — the "distributed" pattern
-  from [`pipeline-samples/parallel/Jenkinsfile-stage-agent`](https://github.com/pipeline-training-ws/pipeline-samples/blob/main/parallel/Jenkinsfile-stage-agent).
+  from [`pipeline-samples/parallel/Jenkinsfile-stage-agent`](https://github.com/mawuku-pipeline-training-ws/pipeline-samples/blob/main/parallel/Jenkinsfile-stage-agent).
 - Run and confirm **two separate pods**, contrasting with `agent-global`.
 
 **4. `RBAC-Folder-dev1-only`** *(folder, RBAC-scoped)*
@@ -286,26 +286,26 @@ earlier, and the grouping below mirrors the workshop's four topic segments.
 
 **5. `01-pipeline-simple`** *(pipeline, `cpsScmFlowDefinition`)*
 
-- Points at `https://github.com/pipeline-training-ws/sample-app-helloworld.git`, `main` branch,
+- Points at `https://github.com/mawuku-pipeline-training-ws/sample-app-helloworld.git`, `main` branch,
   `Jenkinsfile` at repo root, credential `gh-pat`.
 - That Jenkinsfile dynamically loads `shared-library` and calls `pipelineTemplateHelloWorld`,
-  which runs on a Kubernetes pod using [`shared-library/resources/podtemplates/agent.yaml`](https://github.com/pipeline-training-ws/shared-library/blob/main/resources/podtemplates/agent.yaml).
+  which runs on a Kubernetes pod using [`shared-library/resources/podtemplates/agent.yaml`](https://github.com/mawuku-pipeline-training-ws/shared-library/blob/main/resources/podtemplates/agent.yaml).
 - Requires the Kubernetes cloud from §5.2, since `pipelineTemplateHelloWorld` explicitly requests
   a `kubernetes` agent for its `CI` stage.
 - Run and confirm `Load Config`, `Hello World`, and (on `main` only) `Hi` stages execute, printing
-  values sourced from [`sample-app-helloWorld/ci-config.yaml`](https://github.com/pipeline-training-ws/sample-app-helloWorld/blob/main/ci-config.yaml) (`hello: world`,
+  values sourced from [`sample-app-helloWorld/ci-config.yaml`](https://github.com/mawuku-pipeline-training-ws/sample-app-helloWorld/blob/main/ci-config.yaml) (`hello: world`,
   `firstName: Andreas`, `lastName: Caternberg`).
 
 ### Segment 3 — Pipeline Types and Templates
 
-All jobs in this segment read from `pipeline-training-ws` via the `gh-app` credential — confirm
+All jobs in this segment read from `mawuku-pipeline-training-ws` via the `gh-app` credential — confirm
 the GitHub App installation covers `sample-app-helloWorld` and `template-catalog` first (§2 item
 2).
 
 **6. `02-MultiBranchJob-HelloWorld`** *(multibranch)*
 
-- Standard Multibranch Pipeline scanning [`sample-app-helloWorld`](https://github.com/pipeline-training-ws/sample-app-helloWorld), using the repo's own
-  [`Jenkinsfile`](https://github.com/pipeline-training-ws/sample-app-helloWorld/blob/main/Jenkinsfile) (`workflowBranchProjectFactory`), branch/PR/fork discovery traits, GitHub Checks
+- Standard Multibranch Pipeline scanning [`sample-app-helloWorld`](https://github.com/mawuku-pipeline-training-ws/sample-app-helloWorld), using the repo's own
+  [`Jenkinsfile`](https://github.com/mawuku-pipeline-training-ws/sample-app-helloWorld/blob/main/Jenkinsfile) (`workflowBranchProjectFactory`), branch/PR/fork discovery traits, GitHub Checks
   reporting trait, `periodicFolderTrigger: 1h`.
 - Save, **Scan Repository Now**, confirm a child job for `main` (and any open PRs/forks per
   discovery traits).
@@ -314,15 +314,15 @@ the GitHub App installation covers `sample-app-helloWorld` and `template-catalog
 
 - Same repo, but `customBranchProjectFactory` with `marker: ci-config.yaml`: only branches
   containing that file get a child job. The pipeline definition itself is loaded from
-  [`template-catalog`](https://github.com/pipeline-training-ws/template-catalog)'s [`templates/1-helloWorld-MB/Jenkinsfile`](https://github.com/pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/Jenkinsfile) (checked out via `gh-pat`).
+  [`template-catalog`](https://github.com/mawuku-pipeline-training-ws/template-catalog)'s [`templates/1-helloWorld-MB/Jenkinsfile`](https://github.com/mawuku-pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/Jenkinsfile) (checked out via `gh-pat`).
 - Scan and confirm child jobs only appear for branches carrying `ci-config.yaml`. Remove/re-add
   that file on a test branch and re-scan to see the child job disappear/reappear.
 
 **8. `03-GitHub-Organisation`** *(organizationFolder)*
 
-- Scans the entire [`pipeline-training-ws`](https://github.com/pipeline-training-ws) org (`repoOwner`, credential `gh-app`), with two
+- Scans the entire [`mawuku-pipeline-training-ws`](https://github.com/mawuku-pipeline-training-ws) org (`repoOwner`, credential `gh-app`), with two
   marker-based project factories:
-  - `ci-config.yaml` → [`template-catalog`](https://github.com/pipeline-training-ws/template-catalog)'s [`templates/1-helloWorld-MB/Jenkinsfile`](https://github.com/pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/Jenkinsfile) (same pattern
+  - `ci-config.yaml` → [`template-catalog`](https://github.com/mawuku-pipeline-training-ws/template-catalog)'s [`templates/1-helloWorld-MB/Jenkinsfile`](https://github.com/mawuku-pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/Jenkinsfile) (same pattern
     as job 7, applied org-wide).
   - `ci-config-1.yaml` → a minimal inline `echo 'Hello World'` pipeline.
 - `periodicFolderTrigger: 1d`; save and let it run, or trigger **Scan Organization Folder Now**
@@ -332,8 +332,8 @@ the GitHub App installation covers `sample-app-helloWorld` and `template-catalog
 
 - Instantiated from the **Pipeline Template Catalog Examples** catalog (§5.4), model
   `Pipeline-Tem.c3qk18.log-Examples/1-helloWorld-MB`, pre-filled with attributes
-  `githubToken: gh-app`, `repoName: sample-app-helloWorld`, `organisation: pipeline-training-ws` —
-  matching [`template-catalog/templates/1-helloWorld-MB/template.yaml`](https://github.com/pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/template.yaml)'s declared parameters.
+  `githubToken: gh-app`, `repoName: sample-app-helloWorld`, `organisation: mawuku-pipeline-training-ws` —
+  matching [`template-catalog/templates/1-helloWorld-MB/template.yaml`](https://github.com/mawuku-pipeline-training-ws/template-catalog/blob/main/templates/1-helloWorld-MB/template.yaml)'s declared parameters.
 - **Confirm the catalog has synced first** (**Manage Jenkins → Pipeline Template Catalogs**) —
   otherwise the `model:` reference won't resolve. That ID is generated per-controller by
   CloudBees CI and **will drift** if the catalog is re-registered; if `items.yaml` fails to apply

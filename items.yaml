@@ -35,7 +35,7 @@ items:
           userRemoteConfigs:
           - userRemoteConfig:
               credentialsId: gh-pat
-              url: https://github.com/pipeline-training-ws/sample-app-helloworld.git
+              url: https://github.com/mawuku-pipeline-training-ws/sample-app-helloworld.git
           branches:
           - branchSpec:
               name: '*/main'
@@ -96,12 +96,12 @@ items:
                   verbosity:
                     all: {}
               - junit: {}
-          repoOwner: pipeline-training-ws
+          repoOwner: mawuku-pipeline-training-ws
           credentialsId: gh-app
           id: '1'
           repository: sample-app-helloworld
           configuredByUrl: true
-          repositoryUrl: https://github.com/pipeline-training-ws/sample-app-helloworld.git
+          repositoryUrl: https://github.com/mawuku-pipeline-training-ws/sample-app-helloworld.git
       strategy:
         allBranchesSame: {}
   trigger:
@@ -128,7 +128,7 @@ items:
               userRemoteConfigs:
               - userRemoteConfig:
                   credentialsId: gh-pat
-                  url: https://github.com/pipeline-training-ws/template-catalog.git
+                  url: https://github.com/mawuku-pipeline-training-ws/template-catalog.git
               branches:
               - branchSpec:
                   name: '*/main'
@@ -161,12 +161,12 @@ items:
                   verbosity:
                     all: {}
               - junit: {}
-          repoOwner: pipeline-training-ws
+          repoOwner: mawuku-pipeline-training-ws
           credentialsId: gh-app
           id: '1'
           repository: sample-app-helloworld
           configuredByUrl: true
-          repositoryUrl: https://github.com/pipeline-training-ws/sample-app-helloworld.git
+          repositoryUrl: https://github.com/mawuku-pipeline-training-ws/sample-app-helloworld.git
       strategy:
         allBranchesSame: {}
   trigger:
@@ -200,7 +200,7 @@ items:
               verbosity:
                 all: {}
           - junit: {}
-      repoOwner: pipeline-training-ws
+      repoOwner: mawuku-pipeline-training-ws
       credentialsId: gh-app
   orphanedItemStrategy:
     defaultOrphanedItemStrategy:
@@ -221,7 +221,7 @@ items:
                   userRemoteConfigs:
                   - userRemoteConfig:
                       credentialsId: gh-pat
-                      url: https://github.com/pipeline-training-ws/template-catalog.git
+                      url: https://github.com/mawuku-pipeline-training-ws/template-catalog.git
                   branches:
                   - branchSpec:
                       name: '*/main'
@@ -288,7 +288,7 @@ items:
     value: sample-app-helloWorld
     key: repoName
   - type: string
-    value: pipeline-training-ws
+    value: mawuku-pipeline-training-ws
     key: organisation
 - kind: folder
   name: 06-parallel-samples
